@@ -22,4 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('add-blog',[blogcontroller::class,'add_blog']);
 Route::get('get-all-blogs',[blogcontroller::class,'get_all_blogs']);
 Route::post('get-blog-data',[blogcontroller::class,'get_blog_data']);
+Route::post('get-comments',[blogcontroller::class,'get_comments']);
+Route::post('update-comments',[blogcontroller::class,'update_comments']);
+
+
 

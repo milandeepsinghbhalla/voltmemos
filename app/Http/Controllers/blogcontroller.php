@@ -64,4 +64,14 @@ class blogcontroller extends Controller
         $blogdata = $result->blogdata;
         return ["blogdata"=>$blogdata];
     }
+    public function update_comments(Request $req){
+        $blog = blog::find($req->blog_id);
+        $blog->comments = $req->comments;
+        $blog->save();
+    }
+    public function get_comments(Request $req){
+        $blog = blog::find($req->blog_id);
+        $comments = $blog->comments;
+        return ["comments"=>$comments];
+    }
 }

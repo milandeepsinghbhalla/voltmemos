@@ -1,8 +1,10 @@
 import Vue from "vue";
 import VueRouter from 'vue-router'
 import VueResource  from 'vue-resource'
+import VueScrollTo from 'vue-scrollto'
 Vue.use(VueResource);
 Vue.use(VueRouter);
+Vue.use(VueScrollTo);
 
 
 import testcomponent from './vue-components/testcomponent.vue';
@@ -10,6 +12,7 @@ import showblogcomponent from './vue-components/showblogcomponent.vue';
 import log_in_component from './vue-components/log_in_component.vue';
 import navbar_component from './vue-components/navbar_component.vue';
 import blogcardcomponent from './vue-components/blogcardcomponent.vue';
+import comments_container_component from './vue-components/comments_container_component.vue';
 
 // import Editor from 'vue-editor-js/src/index'
 
@@ -27,7 +30,8 @@ const router = new VueRouter({
         {
             path:'/show-blog/:id',
             components:{
-                showblogcomponent: showblogcomponent
+                showblogcomponent: showblogcomponent,
+                comments_container_component: comments_container_component
             }
         },
         {

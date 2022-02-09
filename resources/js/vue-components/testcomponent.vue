@@ -69,7 +69,6 @@
                 </div>
                 <h2 class="mt-3">Start writting blog below here...!!!</h2>
                  <div id="editor"></div>
-
                  <button class="btn-dark btn btn-lg mt-3" v-on:click="send_post">Publish Post</button>
             </div>
         </div>
@@ -81,7 +80,6 @@
 <script>
 
 import Vue from "vue";
-
 
     export default{
         
@@ -255,6 +253,7 @@ import Vue from "vue";
 
         },
         mounted(){
+           
             var toolbarOptions = [
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
             ['blockquote', 'code-block'],
@@ -275,13 +274,17 @@ import Vue from "vue";
 
             ['clean']                                         // remove formatting button
             ];
-        
-            var quill = new Quill('#editor', {
+    
+
+    var quill = new Quill('#editor', {
             modules:{
                 toolbar: toolbarOptions
+               
             },
+             
             theme: 'snow'
             });
+             
             Vue.prototype.$qul = quill;
         }
     }
