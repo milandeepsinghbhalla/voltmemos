@@ -1,5 +1,5 @@
 <template>
-    <div class="container" style="margin-top: 8.5em;">
+    <div v-if="this.$current_user.user_id!=-1" class="container mb-5" style="margin-top: 8.5em;">
         <div class="loader-container" v-if="show_animation==1">
                 <div class="loader"></div>
         </div>
@@ -11,17 +11,18 @@
                         Select Category
                     </button>
                     <ul class="dropdown-menu">
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown" v-for="(sub_categories,category) in categories" :key="category+''+Math.random()" v-show="sub_categories.length>0">
                             <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Mobile
+                            {{category}}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li v-on:click="select_category('mobile_review')"> <span class="dropdown-item"> Review </span></li>
-                                <li v-on:click="select_category('mobile_best_under')" class="dropdown-item" > best under</li>
-                                <li v-on:click="select_category('mobile_comparison')" class="dropdown-item" > Comparison</li>
+                                <li v-for="sub_category in sub_categories" :key="sub_category+''+Math.random()" v-on:click="select_category(sub_category)"> <span class="dropdown-item"> {{sub_category.replaceAll('_'," ")}} </span></li>
+                                <!-- <li v-on:click="select_category('mobile_best_under')" class="dropdown-item" > best under</li>
+                                <li v-on:click="select_category('mobile_comparison')" class="dropdown-item" > Comparison</li> -->
                             </ul>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li v-for="(sub_categories,category) in categories" :key="category+''+Math.random()" v-show="sub_categories.length==0" v-on:click="select_category(category)"> <span class="dropdown-item"> {{category.replaceAll('_'," ")}} </span></li>
+                        <!-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Laptops
                             </a>
@@ -30,7 +31,7 @@
                                 <li v-on:click="select_category('laptop_best_under')" class="dropdown-item" > best under</li>
                                 <li v-on:click="select_category('laptop_Comparison')" class="dropdown-item" > Comparison</li>
                             </ul>
-                        </li>
+                        </li> -->
                     </ul>
                 
                 </div>
@@ -52,10 +53,10 @@
                         
                 </div>
                 <div class="mt-3">
-                    <label for="companies" class="form-label">Companies (enter names seprated by *) :-</label>
-                    <input type="Text" class="form-control" id="companies" v-model="blog_data.companies" placeholder="eg:- Samsung*Apple*Motorola">
+                    <label for="keywords" class="form-label">keywords (enter words seprated by ,) :-</label>
+                    <input type="Text" class="form-control" id="keywords" v-model="blog_data.keywords">
                 </div>
-                <div class="mt-3">
+                <!-- <div class="mt-3">
                     <label for="products" class="form-label">Products (enter names seprated by *) :-</label>
                     <input type="Text" class="form-control" id="products" v-model="blog_data.products" placeholder="eg:- Poco x3*Galaxy x7*iphone 13">
                 </div>
@@ -66,10 +67,10 @@
                 <div class="mt-3">
                     <label for="colors" class="form-label">colors (enter colors seprated by *) :-</label>
                     <input type="Text" class="form-control" id="colors" v-model="blog_data.colors" placeholder="eg:- blue*purple*pink*black">
-                </div>
+                </div> -->
                 <h2 class="mt-3">Start writting blog below here...!!!</h2>
                  <div id="editor"></div>
-                 <button class="btn-dark btn btn-lg mt-3" v-on:click="send_post">Publish Post</button>
+                 <button class="btn-dark btn btn-lg mt-3" v-on:click="send_post">Publish Blog</button>
             </div>
         </div>
     </div>
@@ -92,14 +93,24 @@ import Vue from "vue";
                     selected_category: "",
                     title: "",
                     description: "",
-                    companies: "",
-                    products: "",
-                    prices: "",
-                    colors: "",
+                    keywords: "",
                     uploaded_at: "",
-                    blogdata: ""
+                    blogdata: "",
+                    user_id: this.$current_user.user_id
+                   
 
                 },
+                 categories: {
+                        tech:["mobiles","laptops","apps","softwares","viruses","others_in_tech"],
+                        lifestyle:["dressing","behaviour","incedents","others_in_lifestyle"],
+                        sports:["cricket","football","basketball","others_in_sports"],
+                        politics:["india","global"],
+                        entertainment: ["bollywood","hollywood","series","ott","others_in_entertainment"],
+                        astrology: ["daily_horoscope","weekly_horoscope","monthly_horoscope","others_in_astrology"],
+                        science: [],
+                        finance: [],
+                        others: []
+                    },
                 card_img: {
                     link: ""
                 },
@@ -175,7 +186,7 @@ import Vue from "vue";
             async send_post(){
                 
                 function optamize_star_fields(data){
-                    let optamized_array = data.split('*');
+                    let optamized_array = data.split(',');
                    let new_optamized_array = optamized_array.map(element => {
                         
                         return element.trim();
@@ -183,20 +194,20 @@ import Vue from "vue";
                     });
                     return JSON.stringify(new_optamized_array);
                 }
-                if(this.blog_data.selected_category!=""&&this.blog_data.selected_category!=null&&this.blog_data.title!=""&&this.blog_data.title!=null&&this.blog_data.description!=""&&this.blog_data.description!=null){
+                if(this.blog_data.keywords.length>0&&this.blog_data.selected_category!=""&&this.blog_data.selected_category!=null&&this.blog_data.title!=""&&this.blog_data.title!=null&&this.blog_data.description!=""&&this.blog_data.description!=null){
                     if(this.card_img.link!=""&&this.card_img.link!=null){
                         this.show_animation = 1;
                         var delta = this.$qul.getContents();
                         let delta_str = JSON.stringify(delta);
                         this.blog_data.blogdata = delta_str;
-                        if(this.blog_data.companies!=""&&this.blog_data.companies!=null)
-                            this.blog_data.companies = optamize_star_fields( this.blog_data.companies);
-                        if(this.blog_data.products!=""&&this.blog_data.products!=null)
-                            this.blog_data.products = optamize_star_fields( this.blog_data.products);
-                        if(this.blog_data.prices!=""&&this.blog_data.prices!=null)
-                            this.blog_data.prices = optamize_star_fields(this.blog_data.prices);
-                        if(this.blog_data.colors!=""&&this.blog_data.colors!=null)
-                            this.blog_data.colors = optamize_star_fields(this.blog_data.colors);
+                        if(this.blog_data.keywords!=""&&this.blog_data.keywords!=null)
+                            this.blog_data.keywords = optamize_star_fields( this.blog_data.keywords);
+                        // if(this.blog_data.products!=""&&this.blog_data.products!=null)
+                        //     this.blog_data.products = optamize_star_fields( this.blog_data.products);
+                        // if(this.blog_data.prices!=""&&this.blog_data.prices!=null)
+                        //     this.blog_data.prices = optamize_star_fields(this.blog_data.prices);
+                        // if(this.blog_data.colors!=""&&this.blog_data.colors!=null)
+                        //     this.blog_data.colors = optamize_star_fields(this.blog_data.colors);
                         var today = new Date();
                         const monthNames = ["January", "February", "March", "April", "May", "June",
                                             "July", "August", "September", "October", "November", "December"
@@ -221,11 +232,12 @@ import Vue from "vue";
                                 for(const prop in this.blog_data){
                                     this.blog_data[prop] = "";
                                 }
+                                location.assign('/#/');
                             }
                             else{
                                 this.show_animation = 0;
                                 swal("blog couldn't be uploaded")
-                                this.blog_data.companies = "";
+                                this.blog_data.keywords = "";
                                 this.blog_data.products = "";
                                 this.blog_data.prices = "";
                                 this.blog_data.colors = "";
@@ -239,7 +251,7 @@ import Vue from "vue";
                    
                 }
                 else{
-                    swal("category , title and description are required...!!"," ","warning");
+                    swal("all fields are required...!!"," ","warning");
                 }
                
 
@@ -251,6 +263,15 @@ import Vue from "vue";
                 
             }
 
+        },
+        created(){
+            if(!localStorage.getItem('firstload')){
+                localStorage.setItem('firstload',"true");
+                location.reload();
+            }
+            else{
+                localStorage.removeItem('firstload');
+            }
         },
         mounted(){
            

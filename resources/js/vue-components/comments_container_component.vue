@@ -5,7 +5,7 @@
             <div class="col-lg-7 col-12">
                 <button class="btn btn-sm btn-success" v-if="add_comment_now==0" v-on:click="add_comment_now_clicked">Add comment</button>
                 <add-comment-component v-if="add_comment_now==1" v-bind:comments="comments"></add-comment-component>
-                <h5>Comments:-</h5>
+                <h5 class="mt-3">Comments:-</h5>
             </div>
         <show-comments-component v-for="comment in comments" v-bind:key="comment.key"  v-bind:comment="comment" v-bind:p_email="null"></show-comments-component>
         </div>

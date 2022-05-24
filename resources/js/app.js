@@ -13,7 +13,9 @@ import log_in_component from './vue-components/log_in_component.vue';
 import navbar_component from './vue-components/navbar_component.vue';
 import blogcardcomponent from './vue-components/blogcardcomponent.vue';
 import comments_container_component from './vue-components/comments_container_component.vue';
-
+import signup_component from './vue-components/signup_component.vue';
+import admin_panel_page_component from "./vue-components/admin_panel_page_component.vue";
+import home_page_component from "./vue-components/home_page_component.vue";
 // import Editor from 'vue-editor-js/src/index'
 
 
@@ -22,9 +24,33 @@ import comments_container_component from './vue-components/comments_container_co
 const router = new VueRouter({
 	routes: [
         {
+            path: "/",
+            components: {
+                home_page_component: home_page_component
+            }
+        },
+        {
+            path: "/admin-panel",
+            components:{
+                admin_panel_page_component: admin_panel_page_component
+            }
+        },
+        {
+            path:'/search-results',
+            components:{
+                search_results: blogcardcomponent
+            }
+        },
+        {
             path:'/write-blog',
             components: {
                 testcomponent: testcomponent
+            }
+        },
+        {
+            path:'/edit-blog/:id',
+            components: {
+                editblogcomponent: showblogcomponent
             }
         },
         {
@@ -48,47 +74,59 @@ const router = new VueRouter({
 
         },
         {
-            path:'/mobile_review',
-            components:{
-                mobile_reviewblogcardcomponent: blogcardcomponent
+            path: '/blog-card/:category',
+            components: {
+                blogcardcomponent: blogcardcomponent
             }
-            
         },
         {
-            path:'/mobile_best_under',
+            path: "/sign-up",
             components:{
-                mobile_best_underblogcardcomponent: blogcardcomponent
+                signup_component:signup_component
             }
+        }
+        // {
+        //     path:'/mobile_review',
+        //     components:{
+        //         mobile_reviewblogcardcomponent: blogcardcomponent
+        //     }
             
-        },
-        {
-            path:'/mobile_comparison',
-            components:{
-                mobile_comparisonblogcardcomponent: blogcardcomponent
-            }
+        // },
+        // {
+        //     path:'/mobile_best_under',
+        //     components:{
+        //         mobile_best_underblogcardcomponent: blogcardcomponent
+        //     }
             
-        },
-        {
-            path:'/laptop_review',
-            components:{
-                laptop_reviewblogcardcomponent: blogcardcomponent
-            }
+        // },
+        // {
+        //     path:'/mobile_comparison',
+        //     components:{
+        //         mobile_comparisonblogcardcomponent: blogcardcomponent
+        //     }
             
-        },
-        {
-            path:'/laptop_best_under',
-            components:{
-                laptop_best_underblogcardcomponent: blogcardcomponent
-            }
+        // },
+        // {
+        //     path:'/laptop_review',
+        //     components:{
+        //         laptop_reviewblogcardcomponent: blogcardcomponent
+        //     }
             
-        },
-        {
-            path:'/laptop_comparison',
-            components:{
-                laptop_comparisonblogcardcomponent: blogcardcomponent
-            }
+        // },
+        // {
+        //     path:'/laptop_best_under',
+        //     components:{
+        //         laptop_best_underblogcardcomponent: blogcardcomponent
+        //     }
             
-        },
+        // },
+        // {
+        //     path:'/laptop_comparison',
+        //     components:{
+        //         laptop_comparisonblogcardcomponent: blogcardcomponent
+        //     }
+            
+        // },
     ]})
 
 
@@ -201,83 +239,91 @@ const app = new Vue({
         all_blogs:[]
     },
     computed:{
-        mobile_review(){
-            let blogs = []
-            this.all_blogs.forEach(element=>{
-                if(element.category=="mobile_review"){
-                    if(!blogs.includes(element))
-                        blogs.push(element);
-                }
-            })
-            return blogs;
-        },
-        mobile_best_under(){
-            let blogs = []
-            this.all_blogs.forEach(element=>{
-                if(element.category=="mobile_best_under"){
-                    if(!blogs.includes(element))
-                        blogs.push(element);
-                }
-            })
-            return blogs;
-        },
-        mobile_comparison(){
-            let blogs = []
-            this.all_blogs.forEach(element=>{
-                if(element.category=="mobile_comparison"){
-                    if(!blogs.includes(element))
-                        blogs.push(element);
-                }
-            })
-            return blogs;
-        },
-        laptop_review(){
-            let blogs = []
-            this.all_blogs.forEach(element=>{
-                if(element.category=="laptop_review"){
-                    if(!blogs.includes(element))
-                        blogs.push(element);
-                }
-            })
-            return blogs;
-        },
-        laptop_best_under(){
-            let blogs = []
-            this.all_blogs.forEach(element=>{
-                if(element.category=="laptop_best_under"){
-                    if(!blogs.includes(element))
-                        blogs.push(element);
-                }
-            })
-            return blogs;
-        },
-        laptop_comparison(){
-            let blogs = []
-            this.all_blogs.forEach(element=>{
-                if(element.category=="laptop_comparison"){
-                    if(!blogs.includes(element))
-                        blogs.push(element);
-                }
-            })
-            return blogs;
-        }
+        // mobile_review(){
+        //     let blogs = []
+        //     this.all_blogs.forEach(element=>{
+        //         if(element.category=="mobile_review"){
+        //             if(!blogs.includes(element))
+        //                 blogs.push(element);
+        //         }
+        //     })
+        //     return blogs;
+        // },
+        // mobile_best_under(){
+        //     let blogs = []
+        //     this.all_blogs.forEach(element=>{
+        //         if(element.category=="mobile_best_under"){
+        //             if(!blogs.includes(element))
+        //                 blogs.push(element);
+        //         }
+        //     })
+        //     return blogs;
+        // },
+        // mobile_comparison(){
+        //     let blogs = []
+        //     this.all_blogs.forEach(element=>{
+        //         if(element.category=="mobile_comparison"){
+        //             if(!blogs.includes(element))
+        //                 blogs.push(element);
+        //         }
+        //     })
+        //     return blogs;
+        // },
+        // laptop_review(){
+        //     let blogs = []
+        //     this.all_blogs.forEach(element=>{
+        //         if(element.category=="laptop_review"){
+        //             if(!blogs.includes(element))
+        //                 blogs.push(element);
+        //         }
+        //     })
+        //     return blogs;
+        // },
+        // laptop_best_under(){
+        //     let blogs = []
+        //     this.all_blogs.forEach(element=>{
+        //         if(element.category=="laptop_best_under"){
+        //             if(!blogs.includes(element))
+        //                 blogs.push(element);
+        //         }
+        //     })
+        //     return blogs;
+        // },
+        // laptop_comparison(){
+        //     let blogs = []
+        //     this.all_blogs.forEach(element=>{
+        //         if(element.category=="laptop_comparison"){
+        //             if(!blogs.includes(element))
+        //                 blogs.push(element);
+        //         }
+        //     })
+        //     return blogs;
+        // }
     },
-    created(){
-        this.$http.get('/api/get-all-blogs').then(res=>{
+    async created(){
+        
+        if(localStorage.getItem('current_user')){
+            
+            Vue.prototype.$current_user = JSON.parse(localStorage.getItem('current_user'));
+            console.log("in current_user ",this.$current_user)
+        }
+        else{
+            Vue.prototype.$current_user = {
+                user_id: -1,
+                name: "guest",
+                email: ""
+            }
+        }
+        await this.$http.get('/api/get-all-blogs').then(res=>{
             this.all_blogs = res.body;
             this.all_blogs.forEach(blog=>{
-            if(blog.company_names!=null)
-            blog.company_names = JSON.parse(blog.company_names);
-            if(blog.product_names!=null)
-            blog.product_names = JSON.parse(blog.product_names);
-            if(blog.prices!=null)
-            blog.prices = JSON.parse(blog.prices);
-            if(blog.colors!=null)
-            blog.colors = JSON.parse(blog.colors);
-
+            if(blog.keywords.length>0)
+            blog.keywords = JSON.parse(blog.keywords);
+            
             })
             
 
         })
+
     }
 })
